@@ -1,0 +1,633 @@
+esphome:
+  name: rct-power-inverter
+  friendly_name: RCT Power Inverter
+
+esp32:
+  board: esp32cam
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "your_private_key"
+
+ota:
+  - platform: esphome
+    password: "your_private_key"
+
+wifi:
+  # ssid: !secret wifi_ssid
+  # password: !secret wifi_password
+  ssid: your_wifi_ssid
+  password: your_wifi_password
+
+uart:
+  id: uart_modbus
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 9600
+  stop_bits: 1
+
+modbus:
+  id: modbus1
+  send_wait_time: 200ms
+  uart_id: uart_modbus
+
+modbus_controller:
+ - id: rctpower
+   address: 1
+   modbus_id: modbus1
+   setup_priority: -10
+
+sensor:
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: acCurrent
+    name: "AC Current (Sum of active phases)"
+    address: 40032
+    accuracy_decimals: 2
+    device_class: current
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "A"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.01
+    
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseACurrent
+    name: "Phase A Current"
+    address: 40033
+    accuracy_decimals: 2
+    device_class: current
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "A"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseBCurrent
+    name: "Phase B Current"
+    address: 40034
+    accuracy_decimals: 2
+    device_class: current
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "A"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseCCurrent
+    name: "Phase C Current"
+    address: 40035
+    accuracy_decimals: 2
+    device_class: current
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "A"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseVoltageAB
+    name: "Phase Voltage AB"
+    address: 40036
+    accuracy_decimals: 1
+    device_class: voltage
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseVoltageBC
+    name: "Phase Voltage BC"
+    address: 40037
+    accuracy_decimals: 1
+    device_class: voltage
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseVoltageCA
+    name: "Phase Voltage CA"
+    address: 40038
+    accuracy_decimals: 1
+    device_class: voltage
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseVoltageAN
+    name: "Phase Voltage AN"
+    address: 40039
+    accuracy_decimals: 1
+    device_class: voltage
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseVoltageBN
+    name: "Phase Voltage BN"
+    address: 40040
+    accuracy_decimals: 1
+    device_class: voltage
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: phaseVoltageCN
+    name: "Phase Voltage CN"
+    address: 40041
+    accuracy_decimals: 1
+    device_class: voltage
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: S_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_power
+    name: "AC Power"
+    address: 40042
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: S_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: line_frequency
+    name: "Line Frequency"
+    address: 40043
+    accuracy_decimals: 3
+    device_class: frequency
+    register_type: holding
+    unit_of_measurement: "Hz"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.001
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_apparent_power
+    name: "AC Apparent Power"
+    address: 40044
+    device_class: apparent_power
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "VA"
+    value_type: S_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_reactive_power
+    name: "AC Reactive Power"
+    address: 40045
+    device_class: reactive_power
+    disabled_by_default: True
+    register_type: holding
+    unit_of_measurement: "VAr"
+    value_type: S_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_power_factor
+    name: "AC Power Factor"
+    address: 40046
+    device_class: power_factor
+    disabled_by_default: True
+    register_type: holding
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_energy_day
+    name: "AC Energy (Day)"
+    address: 40047
+    device_class: energy
+    register_type: holding
+    unit_of_measurement: "Wh"
+    value_type: U_WORD
+    filters:
+      - multiply: 10
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: current_on_pv_input_a
+    name: "Current on PV input A"
+    address: 40048
+    accuracy_decimals: 2
+    device_class: current
+    register_type: holding
+    unit_of_measurement: "A"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: current_on_pv_input_b
+    name: "Current on PV input B"
+    address: 40049
+    accuracy_decimals: 2
+    device_class: current
+    register_type: holding
+    unit_of_measurement: "A"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: voltage_on_PV_in_a
+    name: "Voltage on PV input A"
+    address: 40050
+    accuracy_decimals: 1
+    device_class: voltage
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: voltage_on_PV_in_b
+    name: "Voltage on PV input B"
+    address: 40051
+    accuracy_decimals: 1
+    device_class: voltage
+    register_type: holding
+    unit_of_measurement: "V"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: dc_power
+    name: "DC Power"
+    address: 40052
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: heat_sink_temperature
+    name: "Heat Sink Temperature"
+    address: 40053
+    accuracy_decimals: 1
+    device_class: temperature
+    entity_category: diagnostic
+    register_type: holding
+    unit_of_measurement: "°C"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: heat_sink_temperature_battery
+    name: "Heat Sink Temperature (battery conv.)"
+    address: 40054
+    accuracy_decimals: 1
+    device_class: temperature
+    entity_category: diagnostic
+    register_type: holding
+    unit_of_measurement: "°C"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: core_temperature
+    name: "Core Temperature"
+    address: 40055
+    accuracy_decimals: 1
+    register_type: holding
+    unit_of_measurement: "°C"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  # Only for internal use with template
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: operatingStateRaw
+    name: "Operating State Raw"
+    address: 40056
+    register_type: holding
+    value_type: U_WORD
+    internal: True
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: bitmark_value1
+    name: "Bitmark Value 1"
+    address: 40057
+    entity_category: diagnostic
+    register_type: holding
+    value_type: U_DWORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_energy_year
+    name: "AC Energy (Year)"
+    address: 40059
+    device_class: energy
+    register_type: holding
+    unit_of_measurement: "kWh"
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: ac_energy_total
+    name: "AC Energy (Total)"
+    address: 40060
+    device_class: energy
+    register_type: holding
+    unit_of_measurement: "kWh"
+    value_type: U_DWORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: power_reduction
+    name: "Power Reduction (Power Control)"
+    address: 40062
+    accuracy_decimals: 2
+    register_type: holding
+    unit_of_measurement: "%"
+    value_type: U_WORD
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: isolation
+    name: "Isolation"
+    address: 40063
+    register_type: holding
+    unit_of_measurement: "kOhm"
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: power_on_pv_input_a
+    name: "Power on PV input A"
+    address: 40064
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: power_on_pv_input_b
+    name: "Power on PV input B"
+    address: 40065
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: U_WORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: rctpower
+  #   id: bitmark_value2
+  #   name: "Bitmark Value 2"
+  #   address: 40066
+  #   disabled_by_default: True
+  #   entity_category: diagnostic
+  #   register_type: holding
+  #   value_type: U_DWORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: rctpower
+  #   id: bitmark_value3
+  #   name: "Bitmark Value 3"
+  #   address: 40068
+  #   disabled_by_default: True
+  #   entity_category: diagnostic
+  #   register_type: holding
+  #   value_type: U_DWORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: rctpower
+  #   id: bitmark_value4
+  #   name: "Bitmark Value 4"
+  #   address: 40070
+  #   disabled_by_default: True
+  #   entity_category: diagnostic
+  #   register_type: holding
+  #   value_type: U_DWORD
+
+  # - platform: modbus_controller
+  #   modbus_controller_id: rctpower
+  #   id: timestamp
+  #   name: "Timestamp"
+  #   address: 40072
+  #   device_class: timestamp
+  #   disabled_by_default: True
+  #   entity_category: diagnostic
+  #   register_type: holding
+  #   value_type: U_DWORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: num_battery_units
+    name: "Installed battery units"
+    address: 40074
+    register_type: holding
+    value_type: U_WORD
+    entity_category: diagnostic
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: state_of_charge
+    name: "State of Charge (SOC)"
+    address: 40075
+    device_class: battery
+    register_type: holding
+    unit_of_measurement: "%"
+    accuracy_decimals: 1
+    value_type: U_WORD
+    filters:
+      - multiply: 0.1
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: loaded_capacity
+    name: "Loaded capacity"
+    address: 40076
+    device_class: energy_storage
+    register_type: holding
+    unit_of_measurement: "Wh"
+    value_type: U_WORD
+    filters:
+      - multiply: 100
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: battery_capacity
+    name: "Battery capacity"
+    address: 40077
+    device_class: energy
+    register_type: holding
+    unit_of_measurement: "Wh"
+    value_type: U_WORD
+    filters:
+      - multiply: 100
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: max_discharge_power
+    name: "Max discharge power"
+    address: 40078
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: max_charge_power
+    name: "Max charge power"
+    address: 40079
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: U_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: battery_power
+    name: "Battery Power"
+    address: 40080
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: S_WORD
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: grid_power
+    name: "Grid Power"
+    address: 40081
+    device_class: power
+    register_type: holding
+    unit_of_measurement: "W"
+    value_type: S_WORD
+    filters:
+      - multiply: 10
+
+text_sensor:
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: model
+    name: "Model"
+    disabled_by_default: True
+    entity_category: DIAGNOSTIC
+    address: 40000
+    register_type: holding
+    response_size: 32
+    skip_updates: 10
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: version
+    name: "Version"
+    disabled_by_default: True
+    entity_category: DIAGNOSTIC
+    address: 40016
+    register_type: holding
+    response_size: 16
+    skip_updates: 10
+
+  - platform: modbus_controller
+    modbus_controller_id: rctpower
+    id: serial
+    name: "Serial number"
+    disabled_by_default: True
+    entity_category: DIAGNOSTIC
+    address: 40024
+    register_type: holding
+    response_size: 16
+    skip_updates: 10
+
+  - platform: template
+    name: "Operating State"
+    lambda: |-
+      int state = (int) id(operatingStateRaw).state;
+      switch (state) {
+        case 0:
+          return {"Standby"};
+        case 1:
+          return {"Initialization"};
+        case 2:
+          return {"Standby"};
+        case 3:
+          return {"Efficiency (develop)"};
+        case 4:
+          return {"Isolation check"};
+        case 5:
+          return {"Island check"};
+        case 6:
+          return {"Power check"};
+        case 7:
+          return {"Symmetry (DC-link alignment)"};
+        case 8:
+          return {"Relays test"};
+        case 9:
+          return {"Grid Passive"};
+        case 10:
+          return {"Prepare Bat Passive"};
+        case 11:
+          return {"Battery Passive"};
+        case 12:
+          return {"H/W check (prepare to start)"};
+        case 13:
+          return {"Feed in"};
+        default:
+          return {"Unknown"};
+      }
