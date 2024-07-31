@@ -25,6 +25,7 @@ Look in the manual for your inverter and search for RS485. The X102 connection o
 - Implement "Bitmask value. Event fields."
 - Create python script to enable modbus
 - Wiring picture
+- Find out if the modbus_controller's update_interval can be reduced
 
 
 ## External Links
