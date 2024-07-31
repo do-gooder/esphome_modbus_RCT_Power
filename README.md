@@ -10,12 +10,23 @@ To be able to use the RS485 interface, you must log in as an ***installer*** via
 Then set the "RS485 Betriebsmodus" to "Modbus Master" under Gerät --> Einstellungen -> Schnittstelle --> RS485. The "RS485 Adresse" must be greater than 0 (e.g. 1).
 
 
+## Wiring
+
+Look in the manual for your inverter and search for RS485. The X102 connection on the communication board should be the correct one. It is also labelled RS485.
+
+**ATTENTION, HIGH VOLTAGE --> Check what is required to ensure that the modules are disconnected from the inverter and that the battery and fuse are switched off if necessary. The inverter must not be energised!**
+
+
+
 ## ToDo
+
 - According to the documentation, it is also possible to write values. This still needs to be worked out
 - Create documentation
 - Implement "Bitmask value. Event fields."
 - Create python script to enable modbus
+- Wiring picture
 
 
 ## External Links
+
 [RS485 Communication with external devices v.1.2](https://downloads.vodnici.net/uploads/wpforo/attachments/536/6706-RCTPowerRS485Communication.pdf)
