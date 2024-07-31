@@ -7,7 +7,7 @@ This is a project for reading values from RCT Power inverters via MODBUS with RS
 
 To be able to use the RS485 interface, you must log in as an ***installer*** via the Android app "[RCT Power App](https://play.google.com/store/apps/details?id=org.rctpower.heiphossil)" (not iOS!).
 
-Then set the "RS485 Betriebsmodus" to "Modbus Master" under Gerät --> Einstellungen -> Schnittstelle --> RS485. The "RS485 Adresse" must be greater than 0 (e.g. 1).
+Then set the "RS485 Betriebsmodus" to "Modbus Master" under Gerät --> Einstellungen -> Schnittstelle --> RS485. The "RS485 Adresse" must be greater than 0 (e.g. 1). Do not forget to press "FLASH"!
 
 
 ## Wiring
