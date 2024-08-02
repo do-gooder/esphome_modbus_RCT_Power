@@ -16,6 +16,8 @@ Look in the manual for your inverter and search for RS485. The X102 connection o
 
 **ATTENTION, HIGH VOLTAGE --> Check what is required to ensure that the modules are disconnected from the inverter and that the battery and fuse are switched off if necessary. The inverter must not be energised!**
 
+[Wiring guide](https://github.com/evcc-io/evcc/discussions/9292#discussioncomment-6702960)
+
 
 
 ## ToDo
